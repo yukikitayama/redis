@@ -4,6 +4,10 @@
 - Understand concept and learn how to use it
 - [DB-Engines Ranking](https://db-engines.com/en/ranking)
 
+## Todo
+
+- [ ] [1.3.1 Voting on articles](https://redis.com/ebook/part-1-getting-started/chapter-1-getting-to-know-redis/1-3-hello-redis/1-3-1-voting-on-articles/)
+
 ## Basic
 
 - Generally, choose to store data in Redis only when the performance or functionality of Redis is necessary.
@@ -11,24 +15,33 @@
 - We will make keys in Redis that map to any one of the below 5 data structure types
   - `STRING`
   - `LIST`
+    - Ordered sequence of strings
   - `SET`
+    - Using a hash table to keep all strings unique in a set.
+    - Unordered
+    - No push and pop, but add and remove by value
   - `HASH`
+    - Mapping of keys to values
+    - Gets translated into a dictionary in Python
+    - Similar to a document in a document store, or a row in a relational database, in that we can access or change
+      individual or multiple fields at a time.
   - `ZSET`
-    - Sorted set. Ordered mapping of string members to floating-point scores, ordered by score.
+    - Sorted set
+    - Keys are unique
+    - Values are limited to floating-point numbers.
 
 ## Redis Cloud
 
 - [Connect to a database](https://docs.redis.com/latest/rc/rc-quickstart/)
-
-## Todo
-
-- [ ] [1.1.1 Redis compared to other databases and software](https://redis.com/ebook/part-1-getting-started/chapter-1-getting-to-know-redis/1-1-what-is-redis/1-1-1-redis-compared-to-other-databases-and-software/)
 
 ## Python
 
 - Redis is Python friendly.
 - `pip install redis`
 - [Redis with Python](https://docs.redis.com/latest/rs/references/client_references/client_python/)
+- [How to Use Redis With Python](https://realpython.com/python-redis/#using-redis-py-redis-in-python)
+- `zadd(KEY, PYTHON_DICTIONARY)`
+  - [not able to insert data using ZADD(sorted set ) in redis using python](https://stackoverflow.com/questions/53553009/not-able-to-insert-data-using-zaddsorted-set-in-redis-using-python)
 
 ## GitHub
 
