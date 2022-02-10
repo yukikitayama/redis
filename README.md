@@ -2,6 +2,23 @@
 
 - Stands for `REmote DIctionary Server`.
 - Understand concept and learn how to use it
+- [DB-Engines Ranking](https://db-engines.com/en/ranking)
+
+## Basic
+
+- Generally, choose to store data in Redis only when the performance or functionality of Redis is necessary.
+  - Use other relational or non-relational database when slower performance is acceptable, or when too big for memory
+- We will make keys in Redis that map to any one of the below 5 data structure types
+  - `STRING`
+  - `LIST`
+  - `SET`
+  - `HASH`
+  - `ZSET`
+    - Sorted set. Ordered mapping of string members to floating-point scores, ordered by score.
+
+## Redis Cloud
+
+- [Connect to a database](https://docs.redis.com/latest/rc/rc-quickstart/)
 
 ## Todo
 
@@ -9,6 +26,8 @@
 
 ## Python
 
+- Redis is Python friendly.
+- `pip install redis`
 - [Redis with Python](https://docs.redis.com/latest/rs/references/client_references/client_python/)
 
 ## GitHub
