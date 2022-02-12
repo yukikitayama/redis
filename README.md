@@ -34,10 +34,15 @@
 
 - [Connect to a database](https://docs.redis.com/latest/rc/rc-quickstart/)
 
+## RedisJSON
+
+- [RedisJSON Commands in Python](https://redis-py.readthedocs.io/en/stable/redismodules.html#redisjson-commands)
+
 ## Python
 
 - Redis is Python friendly.
 - `pip install redis`
+- [redis-py documentation](https://redis-py.readthedocs.io/en/stable/)
 - [Redis with Python](https://docs.redis.com/latest/rs/references/client_references/client_python/)
 - [How to Use Redis With Python](https://realpython.com/python-redis/#using-redis-py-redis-in-python)
 - `zadd(KEY, PYTHON_DICTIONARY)`
