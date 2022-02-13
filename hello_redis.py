@@ -69,6 +69,53 @@ def article_vote(conn: redis.Redis, user, article: str):
 
 
 # Get articles
+def get_articles(conn: redis.Redis, page, order='score:'):
+    # Convert it to 0-based index
+    start = (page - 1) * ARTICLES_PER_PAGE
+    end = start + ARTICLES_PER_PAGE - 1
+
+    # Get keys from ZSET by value order by reverse order
+    # because we want articles from the highest score
+    ids = conn.zrevrange(order, start, end)
+    articles = []
+    for id in ids:
+        print(f'id: {id}')
+
+        # HGETALL returns list of fields and values as dictionary at the key
+        article_data = conn.hgetall(id)
+        print(f'article_data: {article_data}')
+        # As python data to identify, add the id as well to each data
+        article_data['id'] = id
+        articles.append(article_data)
+
+    return articles
+
+
+def add_remove_groups(conn: redis.Redis, article_id, to_add=[], to_remove=[]):
+    article = 'article:' + article_id
+    for group in to_add:
+        conn.sadd('group:' + group, article)
+    for group in to_remove:
+        conn.srem('group:' + group, article)
+
+
+def get_group_articles(conn: redis.Redis, group, page, order='score:'):
+    key = order + group
+    if not conn.exists(key):
+
+        # e.g. key: 'score:new-group', ['group:new-group', 'score:']
+        # 'group:new-group' is SET, 'score:' is ZSET, 'score:new-group' is ZSET
+        # Here intersection of SET and ZSET, so output score just from ZSET
+        # If both are ZSET, aggregate logic is applied
+        conn.zinterstore(
+            key,
+            ['group:' + group, order],
+            aggregate='max'
+        )
+        # Expire in 60 seconds
+        conn.expire(key, 60)
+
+    return get_articles(conn, page, key)
 
 
 def main():
@@ -92,11 +139,12 @@ def main():
     # print(f'Posted a new article with id: {article_id}')  # '1'
     # print()
 
-    # Print HASH
     article_id = '1'
-    r = conn.hgetall('article:' + article_id)
-    pprint.pprint(r)
-    print()
+
+    # Print HASH
+    # r = conn.hgetall('article:' + article_id)
+    # pprint.pprint(r)
+    # print()
 
     # Print all in ZSET
     print(conn.zrange('time:', 0, -1, withscores=True))
@@ -115,6 +163,33 @@ def main():
 
     # Get highest scoring article
     print('The currently highest-scoring articles are:')
+    articles = get_articles(conn, page=1)
+    pprint.pprint(articles)
+    print()
+
+    # Add the current article to a new group
+    # add_remove_groups(conn, article_id, to_add=['new-group'])
+    # print('We added the article to a new group, other articles include:')
+
+    # Get group
+    articles = get_group_articles(conn, group='new-group', page=1)
+    print('Get articles by group')
+    pprint.pprint(articles)
+    print()
+
+    # If need, delete all the keys in redis
+    # keys(PATTERN) returns a list of all keys matching pattern
+    # So to_del is a concatenated list
+    to_del = (
+        conn.keys('time:*')
+        + conn.keys('voted:*')
+        + conn.keys('score:*')
+        + conn.keys('article:*')
+        + conn.keys('group:*')
+    )
+    print(f'to_del: {to_del}')
+    # if to_del:
+    #     conn.delete(*to_del)
 
 
 if __name__ == '__main__':

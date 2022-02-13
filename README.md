@@ -3,10 +3,17 @@
 - Stands for `REmote DIctionary Server`.
 - Understand concept and learn how to use it
 - [DB-Engines Ranking](https://db-engines.com/en/ranking)
+- Redis is another tool that we can use to solve problems.
+- Redis offers
+  - in-memory data making it fast
+  - remote making it accessible to multiple clients and servers
+  - persistent and scalable
+- With Redis, our way of thinking will change from "How should I modify my data to fit into database tables and rows" to
+  "Which structures in Redis will result in an easier-to-maintain solution?"
 
 ## Todo
 
-- [ ] [1.3.1 Voting on articles](https://redis.com/ebook/part-1-getting-started/chapter-1-getting-to-know-redis/1-3-hello-redis/1-3-1-voting-on-articles/)
+- [ ] [2.1 Login and cookie caching](https://redis.com/ebook/part-1-getting-started/chapter-2-anatomy-of-a-redis-web-application/2-1-login-and-cookie-caching/)
 
 ## Basic
 
@@ -55,6 +62,11 @@
 ## Book
 
 - [Redis in Action](https://redis.com/ebook/redis-in-action/)
+
+## GUI
+
+- [How Can I Browse/View The Values Stored in Redis [closed]](https://stackoverflow.com/questions/12292351/how-can-i-browse-view-the-values-stored-in-redis)
+- [Redsmin - Redis GUI](https://www.redsmin.com/)
 
 ## Sharding
 
