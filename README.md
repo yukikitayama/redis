@@ -10,10 +10,13 @@
   - persistent and scalable
 - With Redis, our way of thinking will change from "How should I modify my data to fit into database tables and rows" to
   "Which structures in Redis will result in an easier-to-maintain solution?"
+- Redis doesn't allow nested structures, which non-relational database user might expect.
+  - Because Redis wants to keep the Redis command syntax simple.
+  - To mitigate, find out a better key and save the additional information.
 
 ## Todo
 
-- [ ] [2.1 Login and cookie caching](https://redis.com/ebook/part-1-getting-started/chapter-2-anatomy-of-a-redis-web-application/2-1-login-and-cookie-caching/)
+- [ ] [Chapter 3: Commands in Redis](https://redis.com/ebook/part-2-core-concepts/chapter-3-commands-in-redis/)
 
 ## Basic
 
