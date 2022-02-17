@@ -16,7 +16,7 @@
 
 ## Todo
 
-- [ ] [Chapter 3: Commands in Redis](https://redis.com/ebook/part-2-core-concepts/chapter-3-commands-in-redis/)
+- [ ] [3.7.2 Basic Redis transactions](https://redis.com/ebook/part-2-core-concepts/chapter-3-commands-in-redis/3-7-other-commands/3-7-2-basic-redis-transactions/)
 
 ## Basic
 
@@ -39,6 +39,82 @@
     - Sorted set
     - Keys are unique
     - Values are limited to floating-point numbers.
+
+### String
+
+- Confusing because `STRING` contains byte string, integer, and floating-point
+- Integer range is signed 64-bit integers on 64-bit machine.
+- In Redis, when setting a `STRING` value which can be interpreted as a base-10 integer or floating-point, Redis detects
+  and allow us to manipulate by numeric operation such as increment.
+- If we increment a key which doesn't exist, Redis behaves like the key's value was 0.
+- Below we can set a number as a string, Redis detects it's a number and allow us to increment it, and even if it
+  originally didn't exist.
+
+```
+>>> redis_client.set('KEY', '1')
+True
+>>> redis_client.incr('KEY')
+2
+```
+
+### List
+
+- Good to store a queue of work items, e.g. Recently viewed articles or favorite contacts.
+- `conn.lrange('KEY', 0, -1)`
+  - See all the items in `LIST`.
+- `conn.rpush('KEY', 'a', 'b', 'c')`
+  - Push multiple items one time from right
+
+### Set
+
+- Redis `SET` semantics, such as intersection or union, is very similar to Python set.
+- But the benefit of Redis `SET` is that Redis `SET` is available remotely to many clients.
+
+### Hash
+
+- `conn.hincrby('KEY_NAME', 'KEY', INCREMENT)`
+  - Increment the value stored at the given key in `HASH` by the integer increment
+  - Incrementing a previously nonexistent key in `HASH` in Redis is okay, because Redis operates as though the value
+    had been 0 and increment.
+
+### Zset
+
+- `conn.zrank('KEY_NAME', 'KEY')`
+  - Fetch the 0-indexed position of a member.
+  - e.g. `ZSET` ZSET contains 3 elements, and key a is the bottom, and `conn.zrank('ZSET', 'a')` returns 2.
+- `ZINTERSTORE` is getting intersection of `ZSET`. By default, values are summed up.
+
+```
+>>> conn.zadd('zset-1', 'a', 1, 'b', 2, 'c', 3)
+>>> conn.zadd('zset-2', 'b', 4, 'c', 1, 'd', 0)
+>>> conn.zinterstore('zset-i', ['zset-1', 'zset-2'])
+>>> conn.zrange('zset-i', 0, -1, withscores=True)
+[('b', 6.0), ('c', 4.0)]
+```
+
+- `ZSET` can be unioned and intersectioned with `SET`
+  - A member in `SET` behave as if they were `ZSET` with all scores equal to 1.
+
+### Sorting
+
+- You can sort numerically or alphabetically the number interpretable `STRING`.
+
+```
+>>> conn.rpush('sort-input', 23, 15, 110, 7)
+
+# Sorting numerically
+>>> conn.sort('sort-input')
+['7', '15', '23', '110']
+
+# Sorting alphabetically
+>>> conn.sort('sort-input', alpha=True)
+['110', '15', '23', '7']
+```
+
+## Atomic
+
+- It means that no other client can read or change data while we are reading or changing the same data
+  - Redis describes some commands as atomic.
 
 ## Redis Cloud
 
